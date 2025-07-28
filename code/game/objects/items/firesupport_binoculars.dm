@@ -18,7 +18,7 @@
 		FIRESUPPORT_TYPE_CRUISE_MISSILE_UNLIMITED,
 	)
 
-/obj/item/binoculars/fire_support/Initialize()
+/obj/item/binoculars/fire_support/Initialize(mapload)
 	. = ..()
 	update_icon()
 	for(var/fire_support_type in mode_list)
@@ -174,7 +174,7 @@
 		return FALSE
 	if(target.z != user.z)
 		return FALSE
-	if(!(user in viewers(zoom_tile_offset + zoom_viewsize + 1, target)))
+	if(!(user in viewers(zoom_tile_offset + zoom_viewsize + 3, target)))
 		return FALSE
 	return TRUE
 

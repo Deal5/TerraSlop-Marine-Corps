@@ -46,6 +46,8 @@ GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
 
 #define isrwallturf(A) (istype(A, /turf/closed/wall/r_wall))
 
+#define isresinwall(A) (istype(A, /turf/closed/wall/resin))
+
 #define ismineralturf(A) (istype(A, /turf/closed/mineral))
 
 #define istransparentturf(A) (HAS_TRAIT(A, TURF_Z_TRANSPARENT_TRAIT))
@@ -148,6 +150,7 @@ GLOBAL_LIST_INIT(turfs_openspace, typecacheof(list(
 #define isxenobehemoth(A) (istype(A, /mob/living/carbon/xenomorph/behemoth))
 #define isxenodragon(A) (istype(A, /mob/living/carbon/xenomorph/dragon))
 #define isxenopyrogen(A) (istype(A, /mob/living/carbon/xenomorph/pyrogen))
+#define isxenomelter(A) (istype(A, /mob/living/carbon/xenomorph/runner/melter))
 
 //Silicon mobs
 #define issilicon(A) (istype(A, /mob/living/silicon))

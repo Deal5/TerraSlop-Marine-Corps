@@ -157,15 +157,24 @@
 			tank_desant.forceMove(get_step(tank_desant, direction))
 		if(move_dist > 1)
 			continue
-		if(isxeno(tank_desant) || !isliving(tank_desant))
+		var/throw_dist = 2
+		if(isobj(tank_desant) && !isitem(tank_desant))
 			continue
-		var/mob/living/living_rider = tank_desant
-		if(!living_rider.l_hand || !living_rider.r_hand)
-			continue
-		balloon_alert(living_rider, "poor grip!")
-		var/away_dir = REVERSE_DIR(get_dir(living_rider, root) || pick(GLOB.alldirs))
-		var/turf/target = get_ranged_target_turf(living_rider, away_dir, 3)
-		living_rider.throw_at(target, 3, 3, root)
+		if(ismob(tank_desant))
+			if(!isliving(tank_desant))
+				continue
+			var/mob/living/living_rider = tank_desant
+			if(!living_rider.stat)
+				if(isxeno(tank_desant))
+					continue
+				if(!living_rider.l_hand || !living_rider.r_hand)
+					continue
+			balloon_alert(living_rider, "poor grip!")
+			throw_dist = 3
+
+		var/away_dir = REVERSE_DIR(get_dir(tank_desant, root) || pick(GLOB.alldirs))
+		var/turf/target = get_ranged_target_turf(tank_desant, away_dir, throw_dist)
+		tank_desant.throw_at(target, throw_dist, 3, root)
 
 ///called when the tank is off movement cooldown and someone tries to move it
 /obj/hitbox/proc/on_attempt_drive(atom/movable/movable_parent, mob/living/user, direction)
@@ -214,12 +223,12 @@
 	if((allow_pass_flags & PASS_TANK) && (mover.pass_flags & PASS_TANK))
 		return TRUE
 
-/obj/hitbox/projectile_hit(obj/projectile/proj)
+/obj/hitbox/projectile_hit(atom/movable/projectile/proj)
 	if(proj.shot_from == root)
 		return FALSE
 	return root.projectile_hit(arglist(args))
 
-/obj/hitbox/bullet_act(obj/projectile/proj)
+/obj/hitbox/bullet_act(atom/movable/projectile/proj)
 	SHOULD_CALL_PARENT(FALSE) // this is an abstract object: we have to avoid everything on parent
 	SEND_SIGNAL(src, COMSIG_ATOM_BULLET_ACT, proj)
 	return root.bullet_act(proj)
@@ -316,29 +325,29 @@
 			bound_width = vehicle_width
 			bound_x = -32
 			bound_y = -32
-			root.pixel_w = -65
-			root.pixel_z = -48
+			root.pixel_x = -65
+			root.pixel_y = -48
 		if(SOUTH)
 			bound_height = vehicle_length
 			bound_width = vehicle_width
 			bound_x = -32
 			bound_y = -64
-			root.pixel_w = -65
-			root.pixel_z = -80
+			root.pixel_x = -65
+			root.pixel_y = -80
 		if(WEST)
 			bound_height = vehicle_width
 			bound_width = vehicle_length
 			bound_x = -64
 			bound_y = -32
-			root.pixel_w = -80
-			root.pixel_z = -56
+			root.pixel_x = -80
+			root.pixel_y = -56
 		if(EAST)
 			bound_height = vehicle_width
 			bound_width = vehicle_length
 			bound_x = -32
 			bound_y = -32
-			root.pixel_w = -48
-			root.pixel_z = -56
+			root.pixel_x = -48
+			root.pixel_y = -56
 
 	var/angle_change = dir2angle(new_dir) - dir2angle(old_dir)
 	//north needing to be considered 0 OR 360 is inconvenient, I'm sure there is a non ungabrain way to do this

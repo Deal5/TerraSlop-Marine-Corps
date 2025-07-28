@@ -72,7 +72,12 @@
 #define SMOOTH_GROUP_ICE_WALL S_TURF(40)
 #define SMOOTH_GROUP_SAND S_TURF(41)
 
-#define MAX_S_TURF SMOOTH_GROUP_ICE_WALL //Always match this value with the one above it.
+#define SMOOTH_GROUP_ROOF_NORMAL S_TURF(42)				////turf/open/floor/plating/roof
+#define SMOOTH_GROUP_ROOF_SHEET S_TURF(43)				////turf/open/floor/plating/roof/sheet
+#define SMOOTH_GROUP_ROOF_ASPHALT S_TURF(44)			////turf/open/floor/plating/roof/asphalt
+#define SMOOTH_GROUP_ROOF_WOOD S_TURF(45)				////turf/open/floor/plating/roof/wood
+
+#define MAX_S_TURF SMOOTH_GROUP_ROOF_WOOD //Always match this value with the one above it.
 
 
 #define S_OBJ(num) (MAX_S_TURF + 1 + num)
@@ -144,3 +149,5 @@
 #define SMOOTH_GROUP_FOAM_WALL S_OBJ(70) //foam walls.
 #define SMOOTH_GROUP_TALL_GRASS S_OBJ(71) //tall grass
 #define SMOOTH_GROUP_GRASS_DECAL S_OBJ(72) //grass decal
+
+#define SMOOTH_GROUP_HOLOGRAM S_OBJ(73) //build holograms

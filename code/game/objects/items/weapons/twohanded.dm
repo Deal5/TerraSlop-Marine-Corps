@@ -130,6 +130,7 @@
 	name = "offhand"
 	item_flags = DELONDROP|TWOHANDED|WIELDED
 	resistance_flags = RESIST_ALL
+	layer = BELOW_OBJ_LAYER
 
 /obj/item/weapon/twohanded/offhand/Destroy()
 	if(ismob(loc))
@@ -439,7 +440,7 @@
 
 /obj/item/weapon/twohanded/rocketsledge
 	name = "rocket sledge"
-	desc = "Fitted with a rocket booster at the head, the rocket sledge would deliver a tremendously powerful impact, easily crushing your enemies. Uses fuel to power itself. Press AltClick to tighten your grip. Press Spacebar to change modes."
+	desc = "Fitted with a rocket booster at the head, the rocket sledge would deliver a tremendously powerful impact, easily crushing your enemies. Uses fuel to power itself. Press AltClick to tighten your grip. Press Unique Action to change modes."
 	icon_state = "rocketsledge"
 	worn_icon_state = "rocketsledge"
 	force = 30
@@ -575,7 +576,7 @@
 
 	if(isxeno(M))
 		var/mob/living/carbon/xenomorph/xeno_victim = M
-		if(xeno_victim.fortify || xeno_victim.endure || HAS_TRAIT_FROM(xeno_victim, TRAIT_IMMOBILE, BOILER_ROOTED_TRAIT)) //If we're fortified or use endure we don't give a shit about staggerstun.
+		if(xeno_victim.fortify || xeno_victim.endure || xeno_victim.endurance_active || HAS_TRAIT_FROM(xeno_victim, TRAIT_IMMOBILE, BOILER_ROOTED_TRAIT)) //If we're fortified or use endure we don't give a shit about staggerstun.
 			return
 
 		if(xeno_victim.crest_defense) //Crest defense protects us from the stun.

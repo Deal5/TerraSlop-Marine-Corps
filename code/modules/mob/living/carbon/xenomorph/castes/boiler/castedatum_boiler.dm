@@ -32,8 +32,7 @@
 
 	// *** Flags *** //
 	caste_flags = CASTE_ACID_BLOOD|CASTE_EVOLUTION_ALLOWED
-	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER|CASTE_CAN_HOLD_JELLY
-	caste_traits = null
+	can_flags = parent_type::can_flags|CASTE_CAN_BE_GIVEN_PLASMA
 
 	// *** Defense *** //
 	soft_armor = list(MELEE = 45, BULLET = 45, LASER = 45, ENERGY = 45, BOMB = 0, BIO = 35, FIRE = 45, ACID = 35)
@@ -67,6 +66,12 @@
 		/datum/action/ability/xeno_action/toggle_bomb,
 		/datum/action/ability/activable/xeno/spray_acid/line/boiler,
 		/datum/action/ability/activable/xeno/acid_shroud,
+	)
+
+	mutations = list(
+		/datum/mutation_upgrade/shell/staggered_panic,
+		/datum/mutation_upgrade/spur/gaseous_spray,
+		/datum/mutation_upgrade/veil/acid_trail
 	)
 
 /datum/xeno_caste/boiler/normal
@@ -120,6 +125,12 @@
 		/datum/action/ability/xeno_action/smokescreen_spit,
 		/datum/action/ability/activable/xeno/spray_acid/line/boiler,
 		/datum/action/ability/xeno_action/steam_rush,
+	)
+
+	mutations = list(
+		/datum/mutation_upgrade/shell/gaseous_trail,
+		/datum/mutation_upgrade/spur/neurotoxin_swap,
+		/datum/mutation_upgrade/veil/fast_acid
 	)
 
 /datum/xeno_caste/boiler/sizzler/primordial

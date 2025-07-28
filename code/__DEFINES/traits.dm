@@ -107,6 +107,7 @@
 #define TIMESHIFT_TRAIT "timeshift"
 #define BRAIN_TRAIT "brain"
 #define WIDOW_ABILITY_TRAIT "widow_ability_trait"
+#define BULL_ABILITY_TRAIT "bull_ability_trait"
 #define PSYCHIC_CRUSH_ABILITY_TRAIT "psychic_crush_ability_trait"
 #define VORTEX_ABILITY_TRAIT "vortex_ability_trait"
 #define PETRIFY_ABILITY_TRAIT "petrify_ability_trait"
@@ -117,6 +118,7 @@
 #define CONQUEROR_OBLITERATION_TRAIT "conqueror_obliteration_trait"
 #define HEATRAY_BEAM_ABILITY_TRAIT "heatray_ability_trait"
 #define DRAGON_ABILITY_TRAIT "dragon_ability_trait"
+#define HIVELORD_ABILITY_TRAIT "hivelord_ability_trait"
 #define VALHALLA_TRAIT "valhalla"
 #define WEIGHTBENCH_TRAIT "weightbench"
 #define BOILER_ROOTED_TRAIT "boiler_rooted"
@@ -133,6 +135,7 @@
 #define MOVEMENT_SWAP_TRAIT "movement_swap_trait"
 #define MANIFESTED_TRAIT "manifested_trait"
 #define HOVERBIKE_TRAIT "hoverbike_trait"
+#define MUTATION_TRAIT "mutation_trait"
 /// This trait comes from when a mob is currently typing.
 #define CURRENTLY_TYPING_TRAIT "currently_typing"
 /// Makes you way too tall. Like just too much, dude, it's kind of creepy. Humanoid only.
@@ -216,6 +219,11 @@
 #define TRAIT_FOV_APPLIED "fov_applied"
 /// Expands our FOV by 30 degrees if restricted
 #define TRAIT_EXPANDED_FOV "expanded_fov"
+///xenos that can disable miners
+#define TRAIT_CAN_DISABLE_MINER "can_disable_miner"
+///xenos that can tear open holes
+#define TRAIT_CAN_TEAR_HOLE "can_tear_hole"
+
 
 ///Traits for managing AM pass_flags
 #define TRAIT_PASS_LOW_STRUCTURE "pass_low_structure"
@@ -263,6 +271,7 @@
 #define TRAIT_BULWARKED_TURF "bulwarked_turf" // turf is affected by bulwark ability
 #define TRAIT_RECOVERY_PYLON_TURF "recovery_pylon_turf" // Turf is affected by a recovery pylon.
 #define TRAIT_BLOODTHIRSTER "bloodthirster" // xeno has the bloodthirster ability
+#define TRAIT_WEB_PULLER "web_puller" // Xenomorph has a special interaction with the Snaring Web structure.
 
 //important_recursive_contents traits
 /*
@@ -272,6 +281,7 @@
 #define TRAIT_AREA_SENSITIVE "area-sensitive"
 #define TRAIT_HEARING_SENSITIVE "hearing_sensitive" //target is hearing sensitive. Every hearing sensitive atom has this trait
 
+#define TRAIT_HAS_INTERIOR "has_interior" // Used for atoms that have an interior datum
 /// Trait given to a mob that is currently thinking (giving off the "thinking" icon), used in an IC context
 #define TRAIT_THINKING_IN_CHARACTER "currently_thinking_IC"
 

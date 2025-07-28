@@ -6,6 +6,8 @@
 	var/faction = null
 	var/last_move = null
 	var/last_move_time = 0
+	/// A list containing arguments for Moved().
+	VAR_PRIVATE/tmp/list/active_movement
 	var/anchored = FALSE
 	///How much the atom tries to push things out its way
 	var/move_force = MOVE_FORCE_DEFAULT
@@ -371,9 +373,11 @@
  * most of the time you want forceMove()
  */
 /atom/movable/proc/abstract_move(atom/new_loc)
+	RESOLVE_ACTIVE_MOVEMENT // This should NEVER happen, but, just in case...
 	var/atom/old_loc = loc
+	var/direction = get_dir(old_loc, new_loc)
 	loc = new_loc
-	Moved(old_loc)
+	Moved(old_loc, direction, TRUE)
 
 /**
  * The move proc is responsible for (in order):
@@ -394,11 +398,15 @@
  * Warning : Doesn't support well multi-tile diagonal moves
  */
 /atom/movable/Move(atom/newloc, direction, glide_size_override)
-	var/atom/movable/pullee = pulling
-	if(!moving_from_pull)
-		check_pulling(z_allowed = TRUE)
 	if(!loc || !newloc || loc == newloc)
 		return FALSE
+
+	// A mid-movement... movement... occured, resolve that first.
+	RESOLVE_ACTIVE_MOVEMENT
+	var/atom/movable/pullee = pulling
+
+	if(!moving_from_pull)
+		check_pulling(z_allowed = TRUE)
 
 	if(!direction)
 		direction = get_dir(src, newloc)
@@ -447,6 +455,7 @@
 	if(glide_size_override)
 		set_glide_size(glide_size_override)
 
+	SET_ACTIVE_MOVEMENT(oldloc, direction, FALSE, null)
 	loc = newloc
 	oldloc.Exited(src, direction)
 
@@ -466,7 +475,7 @@
 	if(oldarea != newarea)
 		newarea.Entered(src, oldarea)
 
-	Moved(oldloc, direction)
+	RESOLVE_ACTIVE_MOVEMENT
 
 	if(pulling && pulling == pullee && pulling != moving_from_pull) //we were pulling a thing and didn't lose it during our move.
 		if(pulling.anchored)
@@ -627,10 +636,13 @@
 
 /atom/movable/proc/doMove(atom/destination)
 	. = FALSE
+	RESOLVE_ACTIVE_MOVEMENT
 	var/atom/oldloc = loc
 	var/list/old_locs
 	if(length(locs) > 1)
 		old_locs = locs
+
+	SET_ACTIVE_MOVEMENT(oldloc, NONE, TRUE, old_locs)
 	if(destination)
 		if(pulledby && !currently_z_moving)
 			pulledby.stop_pulling()
@@ -662,7 +674,7 @@
 			if(old_area)
 				old_area.Exited(src, NONE)
 
-	Moved(oldloc, NONE, TRUE, old_locs)
+	RESOLVE_ACTIVE_MOVEMENT
 
 /atom/movable/Exited(atom/movable/gone, direction)
 	. = ..()
@@ -784,16 +796,17 @@
 
 	var/dist_since_sleep = 0
 
+	var/failed_to_move = FALSE
 	if(dist_x > dist_y)
 		var/error = dist_x/2 - dist_y
-		while(!gc_destroyed && target &&((((x < target.x && dx == EAST) || (x > target.x && dx == WEST)) && get_dist_euclidean(origin, src) < range) || isspaceturf(loc)) && throwing && istype(loc, /turf))
+		while(!gc_destroyed && target &&((((x < target.x && dx == EAST) || (x > target.x && dx == WEST))  && get_dist_euclidean(origin, src) < range) || isspaceturf(loc)) && (!failed_to_move && throwing) && istype(loc, /turf))
 			// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
 			if(error < 0)
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
 					break
 				if(!Move(step, glide_size_override = DELAY_TO_GLIDE_SIZE(1 / speed)))
-					throwing = FALSE
+					failed_to_move = TRUE
 				error += dist_x
 				dist_since_sleep++
 				if(dist_since_sleep >= speed)
@@ -804,7 +817,7 @@
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
 					break
 				if(!Move(step, glide_size_override = DELAY_TO_GLIDE_SIZE(1 / speed)))
-					throwing = FALSE
+					failed_to_move = TRUE
 				error -= dist_y
 				dist_since_sleep++
 				if(dist_since_sleep >= speed)
@@ -812,14 +825,14 @@
 					sleep(0.1 SECONDS)
 	else
 		var/error = dist_y/2 - dist_x
-		while(!gc_destroyed && target &&((((y < target.y && dy == NORTH) || (y > target.y && dy == SOUTH)) && get_dist_euclidean(origin, src) < range) || isspaceturf(loc)) && throwing && istype(loc, /turf))
+		while(!gc_destroyed && target &&((((y < target.y && dy == NORTH) || (y > target.y && dy == SOUTH)) && get_dist_euclidean(origin, src) < range) || isspaceturf(loc)) && (!failed_to_move && throwing) && istype(loc, /turf))
 			// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
 			if(error < 0)
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
 					break
 				if(!Move(step, glide_size_override = DELAY_TO_GLIDE_SIZE(1 / speed)))
-					throwing = FALSE
+					failed_to_move = TRUE
 				error += dist_y
 				dist_since_sleep++
 				if(dist_since_sleep >= speed)
@@ -830,7 +843,7 @@
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
 					break
 				if(!Move(step, glide_size_override = DELAY_TO_GLIDE_SIZE(1 / speed)))
-					throwing = FALSE
+					failed_to_move = TRUE
 				error -= dist_x
 				dist_since_sleep++
 				if(dist_since_sleep >= speed)
@@ -840,7 +853,7 @@
 	//done throwing, either because it hit something or it finished moving
 	if(!originally_dir_locked)
 		atom_flags &= ~DIRLOCK
-	if(isobj(src) && throwing)
+	if(isobj(src) && (!failed_to_move && throwing))
 		throw_impact(get_turf(src), speed)
 	stop_throw(flying, original_layer)
 
@@ -1444,7 +1457,7 @@
 ///Toggles AM between throwing states
 /atom/movable/proc/set_throwing(new_throwing)
 	if(throwing == new_throwing)
-		return
+		return FALSE
 	throwing = new_throwing
 	if(throwing)
 		add_pass_flags(PASS_THROW, THROW_TRAIT)
@@ -1452,6 +1465,7 @@
 	else
 		REMOVE_TRAIT(src, TRAIT_NOSUBMERGE, THROW_TRAIT)
 		remove_pass_flags(PASS_THROW, THROW_TRAIT)
+	return TRUE
 
 ///Toggles AM between flying states
 /atom/movable/proc/set_flying(flying, new_layer)
@@ -1602,8 +1616,7 @@ GLOBAL_LIST_EMPTY(submerge_filter_timer_list)
 	if(!height_diff && !depth_diff)
 		return
 
-	var/icon/AM_icon = icon(icon)
-	var/height_to_use = (64 - AM_icon.Height()) * 0.5 //gives us the right height based on AM's icon height relative to the 64 high alpha mask
+	var/height_to_use = (64 - get_cached_height()) * 0.5 //gives us the right height based on AM's icon height relative to the 64 high alpha mask
 
 	if(!new_height && !new_depth)
 		GLOB.submerge_filter_timer_list[ref(src)] = addtimer(CALLBACK(src, TYPE_PROC_REF(/datum, remove_filter), AM_SUBMERGE_MASK), duration, TIMER_STOPPABLE)
@@ -1626,7 +1639,7 @@ GLOBAL_LIST_EMPTY(submerge_filter_timer_list)
 ///returns that src is covering its turf. Used to prevent turf interactions such as water
 /atom/movable/proc/turf_cover_check(atom/movable/source)
 	SIGNAL_HANDLER
-	return TRUE
+	return TURF_COVERED
 
 ///Wrapper for setting the submerge trait. This trait should ALWAYS be set via this proc so we can listen for the trait removal in all cases
 /atom/movable/proc/add_nosubmerge_trait(trait_source = TRAIT_GENERIC)

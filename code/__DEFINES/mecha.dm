@@ -127,3 +127,9 @@
 		MECHA_POWER = 1,\
 		MECHA_ARMOR = 1,\
 	)
+
+#define MECH_COOLDOWN_KEY_RAPIDFIRE "rapidfire"
+#define MECH_COOLDOWN_KEY_HIGHALPHASTRIKE "highalpha_strike"
+
+///Amount added to move_delay by EMP
+#define MECH_EMP_SLOWDOWN 1

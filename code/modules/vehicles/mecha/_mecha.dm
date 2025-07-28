@@ -455,7 +455,7 @@
 	return TRUE
 
 ///Restores the mech after EMP
-/obj/vehicle/sealed/mecha/proc/restore_equipment()
+/obj/vehicle/sealed/mecha/proc/emp_restore()
 	emp_timer = null
 	mecha_flags &= ~MECHA_EMPED
 	equipment_disabled = FALSE
@@ -592,7 +592,7 @@
 	if(phasing)
 		balloon_alert(user, "not while [phasing]!")
 		return
-	if(HAS_TRAIT(src, TRAIT_INCAPACITATED))
+	if(user.incapacitated(TRUE))
 		return
 	if(construction_state)
 		balloon_alert(user, "end maintenance first!")

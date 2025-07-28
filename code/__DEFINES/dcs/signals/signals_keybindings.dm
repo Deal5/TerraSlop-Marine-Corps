@@ -106,6 +106,7 @@
 //Item toggle keybinds
 #define COMSIG_ITEM_TOGGLE_JETPACK "item_toggle_jetpack"
 #define COMSIG_ITEM_TOGGLE_BLINKDRIVE "item_toggle_blinkdrive"
+#define COMSIG_ITEM_TOGGLE_STRAP "item_toggle_strap"
 
 //Weapon related ability keybinds
 #define COMSIG_WEAPONABILITY_AXESWEEP "weaponability_axesweep"
@@ -139,8 +140,13 @@
 #define COMSIG_MECHABILITY_SWAPWEAPONS "mechability_swapweapons"
 #define COMSIG_MECHABILITY_TOGGLE_ACTUATORS "mechability_toggle_actuators"
 #define COMSIG_MECHABILITY_CLOAK "mechability_cloak"
+#define COMSIG_MECHABILITY_OVERBOOST "mechability_overboost"
+#define COMSIG_MECHABILITY_PULSE_ARMOR "mechability_pulse_armor"
 
 #define COMSIG_ACTION_EXCLUSIVE_TOGGLE "action_exclusive_toggle"
+
+#define COMSIG_ABILITY_PLACE_HOLOGRAM "ability_place_hologram"
+#define COMSIG_ABILITY_SELECT_BUILDTYPE "ability_select_buildtype"
 
 //---- XENO ABILITY KEYBINDS
 

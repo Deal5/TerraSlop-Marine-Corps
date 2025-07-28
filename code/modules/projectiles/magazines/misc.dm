@@ -173,6 +173,7 @@
 	desc = "A packet containing 42 rounds of .454 casull."
 	icon_state = "454"
 	default_ammo = /datum/ammo/bullet/revolver/highimpact
+	w_class = WEIGHT_CLASS_SMALL
 	caliber = CALIBER_454
 	current_rounds = 42
 	max_rounds = 42
@@ -232,7 +233,7 @@
 	name = "packet of .380 ACP"
 	desc = "A packet containing 210 rounds of .380 ACP."
 	caliber = CALIBER_380ACP
-	icon_state = "380acp"
+	icon_state = "380_acp"
 	default_ammo = /datum/ammo/bullet/pistol/tiny/ap
 	w_class = WEIGHT_CLASS_SMALL
 	current_rounds = 210

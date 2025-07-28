@@ -124,7 +124,10 @@ ADMIN_VERB(edit_admin_permissions, R_PERMISSIONS, "Permissions Panel", "Edit adm
 		output += "</table></div><div id='top'><b>Search:</b> <input type='text' id='filter' value='' style='width:70%;' onkeyup='updateSearch();'></div></body>"
 	if(QDELETED(usr))
 		return
-	usr << browse("<!DOCTYPE html><html>[jointext(output, "")]</html>","window=editrights;size=1000x650")
+	var/window_size = "size=1000x650"
+	if(usr.client.window_scaling && usr.client.prefs?.ui_scale)
+		window_size = "size=[1000 * owner.window_scaling]x[650 * owner.window_scaling]"
+	usr << browse("<!DOCTYPE html><html>[jointext(output, "")]</html>","window=editrights;[window_size]")
 
 /datum/admins/proc/edit_rights_topic(list/href_list)
 	if(!check_rights(R_PERMISSIONS))
@@ -306,8 +309,8 @@ ADMIN_VERB(edit_admin_permissions, R_PERMISSIONS, "Permissions Panel", "Edit adm
 		else
 			R = new(new_rank) //blank new admin_rank
 		GLOB.admin_ranks += R
-	var/m1 = "[key_name_admin(usr)] edited the admin rank of [admin_key] to [new_rank] [use_db ? "permanently" : "temporarily"]"
-	var/m2 = "[key_name(usr)] edited the admin rank of [admin_key] to [new_rank] [use_db ? "permanently" : "temporarily"]"
+	var/m1 = "[key_name_admin(usr)] edited the admin rank of [admin_ckey] to [new_rank] [use_db ? "permanently" : "temporarily"]"
+	var/m2 = "[key_name(usr)] edited the admin rank of [admin_ckey] to [new_rank] [use_db ? "permanently" : "temporarily"]"
 	if(use_db)
 		//if a player was tempminned before having a permanent change made to their rank they won't yet be in the db
 		var/old_rank

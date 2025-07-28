@@ -32,8 +32,7 @@
 	// *** Flags *** //
 	caste_flags = CASTE_EVOLUTION_ALLOWED
 	can_hold_eggs = CAN_HOLD_ONE_HAND
-	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_HOLD_FACEHUGGERS|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER|CASTE_CAN_HOLD_JELLY
-	caste_traits = null
+	can_flags = parent_type::can_flags|CASTE_CAN_HOLD_FACEHUGGERS|CASTE_CAN_BE_GIVEN_PLASMA
 
 	// *** Defense *** //
 	soft_armor = list(MELEE = 30, BULLET = 30, LASER = 30, ENERGY = 30, BOMB = 0, BIO = 5, FIRE = 25, ACID = 5)
@@ -65,6 +64,13 @@
 		/datum/action/ability/xeno_action/pheromones/emit_frenzy,
 		/datum/action/ability/xeno_action/carrier_panic,
 		/datum/action/ability/xeno_action/choose_hugger_type,
+	)
+
+	mutations = list(
+		/datum/mutation_upgrade/shell/shared_jelly,
+		/datum/mutation_upgrade/spur/leapfrog,
+		/datum/mutation_upgrade/veil/oviposition,
+		/datum/mutation_upgrade/veil/life_for_life
 	)
 
 /datum/xeno_caste/carrier/normal
